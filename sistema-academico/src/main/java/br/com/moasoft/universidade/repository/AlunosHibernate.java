@@ -28,6 +28,19 @@ public class AlunosHibernate implements Alunos, Serializable {
     
     @Override
     public List<Aluno> todos() {
-        return manager.createQuery("from Aluno").getResultList();
+        return manager.createQuery("from Aluno", Aluno.class).getResultList();
+    }
+
+    @Override
+    public Aluno porCpf(String cpf) {
+        return manager.createQuery("from Aluno where cpf = :cpf", Aluno.class)
+                .setParameter("cpf", cpf)
+                .getSingleResult();
+    }
+
+    @Override
+    public void remover(Aluno aluno) {
+        aluno = porCpf(aluno.getCpf());
+        manager.remove(aluno);
     }
 }

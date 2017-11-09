@@ -5,80 +5,68 @@
  */
 package br.com.moasoft.universidade.model;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.br.CPF;
 
 /**
  *
  * @author danil
  */
-
-@Entity
-@Table(name = "aluno")
-@XmlRootElement
-public class Aluno implements Serializable {
-
+public class AlunoJpa {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codigo")
     private Integer codigo;
     
-    @Column(nullable = false, unique = true, columnDefinition = "char(11)")
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 11)
+    @Column(name = "cpf")
     private String cpf;
     
-    @NotBlank
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 60)
-    @Column(nullable = false)
+    @Column(name = "nome")
     private String nome;
     
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
     @NotNull
-    @Temporal(TemporalType.DATE)
-    @Column(name = "data_nascimento", nullable = false)
-    private Date dataNascimento;
-    
-    @NotBlank
-    @Email
-    @Size(min = 1, max = 60)
-    @Column(nullable = false)
+    @Size(min = 1, max = 50)
+    @Column(name = "email")
     private String email;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aluno")
     private List<Telefone> telefoneList;
-
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "aluno")
     private Endereco endereco;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "aluno")
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoAluno")
     private List<Matricula> matriculaList;
 
-    public Aluno() {
+    
+    public AlunoJpa() {
     }
 
-    public Aluno(Integer codigo) {
+    public AlunoJpa(Integer codigo) {
         this.codigo = codigo;
     }
 
-    public Aluno(Integer codigo, String cpf, String nome, String email) {
+    public AlunoJpa(Integer codigo, String cpf, String nome, String email) {
         this.codigo = codigo;
         this.cpf = cpf;
         this.nome = nome;
@@ -109,14 +97,6 @@ public class Aluno implements Serializable {
         this.nome = nome;
     }
 
-    public Date getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -125,6 +105,7 @@ public class Aluno implements Serializable {
         this.email = email;
     }
 
+    @XmlTransient
     public List<Telefone> getTelefoneList() {
         return telefoneList;
     }
@@ -141,6 +122,7 @@ public class Aluno implements Serializable {
         this.endereco = endereco;
     }
 
+    @XmlTransient
     public List<Matricula> getMatriculaList() {
         return matriculaList;
     }
@@ -151,31 +133,24 @@ public class Aluno implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.codigo);
-        hash = 89 * hash + Objects.hashCode(this.cpf);
+        int hash = 0;
+        hash += (codigo != null ? codigo.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Aluno)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Aluno other = (Aluno) obj;
-        if (!Objects.equals(this.cpf, other.cpf)) {
-            return false;
-        }
-        if (!Objects.equals(this.codigo, other.codigo)) {
-            return false;
-        }
-        return true;
+        Aluno other = (Aluno) object;
+        return !((this.codigo == null && other.getCodigo() != null) || (this.codigo != null && !this.codigo.equals(other.getCodigo())));
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.moasoft.universidade.model.Aluno[ codigo=" + codigo + " ]";
     }
 
 }

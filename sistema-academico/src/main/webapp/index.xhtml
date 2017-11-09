@@ -25,7 +25,7 @@
                 <p:inputText id="email" value="#{cadastroAlunoBean.aluno.email}" />
                 
                 <p:outputLabel/>
-                <p:commandButton value="Cadastrar" action="#{cadastroAlunoBean.cadastrar()}"
+                <p:commandButton value="Cadastrar" action="#{cadastroAlunoBean.salvar()}"
                                  update="@form"/>
             </h:panelGrid>
             
@@ -36,6 +36,10 @@
                 </p:column>
                 <p:column headerText="Nome">
                     <p:outputLabel value="#{aluno.nome}" />
+                </p:column>
+                <p:column width="60">
+                    <p:commandButton icon="ui-icon-trash" action="#{cadastroAlunoBean.remover(aluno)}" 
+                                     process="frm:table-aluno" update="@form"/>
                 </p:column>
             </p:dataTable>
         </h:form>

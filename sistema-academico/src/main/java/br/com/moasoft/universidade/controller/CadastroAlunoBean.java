@@ -33,15 +33,34 @@ public class CadastroAlunoBean implements Serializable {
     
     @PostConstruct
     private void init() {
+        buscarTodos();
+    }
+    
+    public void buscarTodos() {
         this.listaAlunos = this.alunos.todos();
     }
     
     @Transactional
-    public void cadastrar() {
-        this.alunos.salvar(aluno);
-        this.aluno = new Aluno();
-        this.listaAlunos = this.alunos.todos();
-        FacesUtil.addInfoMessage("Aluno cadastrado.");
+    public void salvar() {
+        try {
+            this.alunos.salvar(aluno);
+            this.aluno = new Aluno();
+            buscarTodos();
+            FacesUtil.addInfoMessage("Aluno cadastrado.");
+        } catch (Exception e) {
+            FacesUtil.addErrorMessage("Erro ao cadastrar: " + e.getMessage());
+        }
+    }
+    
+    @Transactional
+    public void remover(Aluno aluno) {
+        try {
+            this.alunos.remover(aluno);
+            buscarTodos();
+            FacesUtil.addInfoMessage("Aluno removido.");
+        } catch(Exception e) {
+            FacesUtil.addErrorMessage("Erro ao cadastrar: " + e.getMessage());
+        }
     }
 
     public Aluno getAluno() {

@@ -15,4 +15,6 @@ import java.util.List;
 public interface Alunos  {
     public Aluno salvar(Aluno aluno);
     public List<Aluno> todos();
+    public Aluno porCpf(String cpf);
+    public void remover(Aluno aluno);
 }
