@@ -6,11 +6,13 @@
 package br.com.moasoft.universidade.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,7 +64,7 @@ public class Disciplina implements Serializable {
     @JoinTable(name = "disciplina_pre_requisito", joinColumns = {
         @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo")}, inverseJoinColumns = {
         @JoinColumn(name = "codigo_disciplina_pre_requisito", referencedColumnName = "codigo")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Disciplina> disciplinasPreRequisito;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "disciplina")
@@ -73,16 +75,22 @@ public class Disciplina implements Serializable {
     private Departamento departamento;
     
     public Disciplina() {
+        this.disciplinaCursoList = new ArrayList<>();
+        this.disciplinasPreRequisito = new ArrayList<>();
     }
 
     public Disciplina(Integer codigo) {
         this.codigo = codigo;
+        this.disciplinaCursoList = new ArrayList<>();
+        this.disciplinasPreRequisito = new ArrayList<>();
     }
 
     public Disciplina(Integer codigo, String nome, int periodo) {
         this.codigo = codigo;
         this.nome = nome;
         this.periodo = periodo;
+        this.disciplinaCursoList = new ArrayList<>();
+        this.disciplinasPreRequisito = new ArrayList<>();
     }
 
     public Integer getCodigo() {

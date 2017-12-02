@@ -6,6 +6,7 @@
 package br.com.moasoft.universidade.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -63,13 +64,13 @@ public class Aluno implements Serializable {
     private String email;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aluno")
-    private List<Telefone> telefoneList;
+    private List<Telefone> telefoneList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "aluno")
-    private Endereco endereco;
+    private Endereco endereco = new Endereco();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "aluno")
-    private List<Matricula> matriculaList;
+    @OneToMany(mappedBy = "aluno")
+    private List<Matricula> matriculaList = new ArrayList<>();
 
     public Aluno() {
     }
@@ -148,7 +149,7 @@ public class Aluno implements Serializable {
     public void setMatriculaList(List<Matricula> matriculaList) {
         this.matriculaList = matriculaList;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;

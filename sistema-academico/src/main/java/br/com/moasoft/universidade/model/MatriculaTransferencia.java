@@ -41,9 +41,10 @@ public class MatriculaTransferencia extends Matricula implements Serializable {
     
     @JoinTable(name = "disciplina_aproveitada", joinColumns = {
         @JoinColumn(name = "codigo_transferencia", referencedColumnName = "codigo_transferencia")}, inverseJoinColumns = {
-        @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo")})
+            @JoinColumn(name = "codigo_curso", referencedColumnName = "codigo_curso"),
+            @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo_disciplina")})
     @ManyToMany
-    private List<Disciplina> disciplinasAproveitadas;
+    private List<DisciplinaCurso> disciplinasAproveitadas;
     
 
     public MatriculaTransferencia() {
@@ -58,11 +59,11 @@ public class MatriculaTransferencia extends Matricula implements Serializable {
     }
 
     @XmlTransient
-    public List<Disciplina> getDisciplinasAproveitadas() {
+    public List<DisciplinaCurso> getDisciplinasAproveitadas() {
         return disciplinasAproveitadas;
     }
 
-    public void setDisciplinasAproveitadas(List<Disciplina> disciplinasAproveitadas) {
+    public void setDisciplinasAproveitadas(List<DisciplinaCurso> disciplinasAproveitadas) {
         this.disciplinasAproveitadas = disciplinasAproveitadas;
     }
 

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.moasoft.universidade.repository;
+package br.com.moasoft.universidade.repository.impl;
 
 import br.com.moasoft.universidade.model.Aluno;
+import br.com.moasoft.universidade.repository.Alunos;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;

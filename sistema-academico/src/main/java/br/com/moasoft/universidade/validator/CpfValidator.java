@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.moasoft.universidade;
+package br.com.moasoft.universidade.validator;
 
 import java.util.InputMismatchException;
 import javax.faces.application.FacesMessage;

@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,16 +37,6 @@ public class Desempenho implements Serializable {
     @EmbeddedId
     protected DesempenhoPK desempenhoPK;
     
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ano")
-    private int ano;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "semestre")
-    private int semestre;
-    
     @Max(value = 10)  //@Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "nota1")
     private BigDecimal nota1;
@@ -69,9 +60,12 @@ public class Desempenho implements Serializable {
     @ManyToOne(optional = false)
     private Matricula matricula;
     
-    @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "codigo_curso", referencedColumnName = "codigo_curso", nullable = false, insertable = false, updatable = false),
+        @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo_disciplina", nullable = false, insertable = false, updatable = false)
+    })
     @ManyToOne(optional = false)
-    private Disciplina disciplina;
+    private DisciplinaCurso disciplinaCurso;
 
     public Desempenho() {
     }
@@ -80,38 +74,12 @@ public class Desempenho implements Serializable {
         this.desempenhoPK = desempenhoPK;
     }
 
-    public Desempenho(DesempenhoPK desempenhoPK, int ano, int semestre) {
-        this.desempenhoPK = desempenhoPK;
-        this.ano = ano;
-        this.semestre = semestre;
-    }
-
-    public Desempenho(int codigoMatricula, int codigoDisciplina) {
-        this.desempenhoPK = new DesempenhoPK(codigoMatricula, codigoDisciplina);
-    }
-
     public DesempenhoPK getDesempenhoPK() {
         return desempenhoPK;
     }
 
     public void setDesempenhoPK(DesempenhoPK desempenhoPK) {
         this.desempenhoPK = desempenhoPK;
-    }
-
-    public int getAno() {
-        return ano;
-    }
-
-    public void setAno(int ano) {
-        this.ano = ano;
-    }
-
-    public int getSemestre() {
-        return semestre;
-    }
-
-    public void setSemestre(int semestre) {
-        this.semestre = semestre;
     }
 
     public BigDecimal getNota1() {
@@ -162,12 +130,12 @@ public class Desempenho implements Serializable {
         this.matricula = matricula;
     }
 
-    public Disciplina getDisciplina() {
-        return disciplina;
+    public DisciplinaCurso getDisciplinaCurso() {
+        return disciplinaCurso;
     }
 
-    public void setDisciplina(Disciplina disciplina) {
-        this.disciplina = disciplina;
+    public void setDisciplinaCurso(DisciplinaCurso disciplinaCurso) {
+        this.disciplinaCurso = disciplinaCurso;
     }
 
     @Override

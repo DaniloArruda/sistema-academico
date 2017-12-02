@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -56,9 +57,12 @@ public class HistoricoMatricula implements Serializable {
     @ManyToOne(optional = false)
     private Matricula matricula;
     
-    @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "codigo_curso", referencedColumnName = "codigo_curso", insertable = false, updatable = false),
+        @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo_disciplina", insertable = false, updatable = false)
+    })
     @ManyToOne(optional = false)
-    private Disciplina disciplina;
+    private DisciplinaCurso disciplinaCurso;
 
     public HistoricoMatricula() {
     }
@@ -118,12 +122,12 @@ public class HistoricoMatricula implements Serializable {
         this.matricula = matricula;
     }
 
-    public Disciplina getDisciplina() {
-        return disciplina;
+    public DisciplinaCurso getDisciplinaCurso() {
+        return disciplinaCurso;
     }
 
-    public void setDisciplina(Disciplina disciplina) {
-        this.disciplina = disciplina;
+    public void setDisciplinaCurso(DisciplinaCurso disciplinaCurso) {
+        this.disciplinaCurso = disciplinaCurso;
     }
 
     @Override

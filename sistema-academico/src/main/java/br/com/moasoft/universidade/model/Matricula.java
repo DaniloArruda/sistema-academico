@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,19 +50,21 @@ public class Matricula implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "codigo")
     private Integer codigo;
     
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
-    @Column(name = "matricula", columnDefinition = "char(8)")
+    @Column(columnDefinition = "char(8)", nullable = false)
     private String matricula;
     
     @Max(value = 10)  // @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "coeficiente_rendimento")
     private BigDecimal coeficienteRendimento;
+    
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false, columnDefinition = "enum('ATIVA', 'TRANCADA', 'ENCERRADA')")
+    private Situacao situacao;
     
     @ManyToMany(mappedBy = "matriculaList")
     private List<Turma> turmaList;
@@ -114,6 +118,14 @@ public class Matricula implements Serializable {
 
     public void setCoeficienteRendimento(BigDecimal coeficienteRendimento) {
         this.coeficienteRendimento = coeficienteRendimento;
+    }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
     }
 
     @XmlTransient

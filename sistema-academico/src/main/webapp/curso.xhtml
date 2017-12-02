@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h:form id="frm">
+            <p:messages autoUpdate="true" closable="true" />
+            
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Nome" for="nome"/>
+                <p:inputText id="nome" value="#{cadastroCursoBean.curso.nome}" />
+                
+                <p:outputLabel value="Departamento" for="departamento"/>
+                <p:selectOneMenu id="departamento" value="#{cadastroCursoBean.curso.departamento}" >
+                    <f:selectItem itemLabel="Selecione um departamento" noSelectionOption="true" />
+                    <f:selectItems value="#{cadastroCursoBean.listaDepartamentos}" var="departamento"
+                                   itemLabel="#{departamento.nome}" itemValue="#{departamento}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Créditos" for="creditos"/>
+                <p:inputNumber id="creditos" value="#{cadastroCursoBean.curso.numeroCreditos}" 
+                               decimalPlaces="0" />
+                
+                <p:outputLabel value="Carga horária" for="carga-horaria"/>
+                <p:inputNumber id="carga-horaria" value="#{cadastroCursoBean.curso.cargaHoraria}" 
+                               decimalPlaces="0" />
+                
+                <p:outputLabel value="Quantidade de disciplinas obrigatórias" for="qtd-obrigatorias"/>
+                <p:inputNumber id="qtd-obrigatorias" value="#{cadastroCursoBean.curso.totalDisciplinasObrigatorias}" 
+                               decimalPlaces="0" />
+           
+                <p:outputLabel/>
+                <p:commandButton value="Cadastrar" action="#{cadastroCursoBean.salvar()}"
+                                 update="@form"/>
+            </h:panelGrid>
+            
+            <p:dataTable id="table-curso" value="#{cadastroCursoBean.listaCursos}" var="curso"
+                         style="margin-top:20px;">
+                
+                <p:column headerText="Nome">
+                    <p:outputLabel value="#{curso.nome}" />
+                </p:column>
+                
+                <p:column headerText="Departamento">
+                    <p:outputLabel value="#{curso.departamento.nome}" />
+                </p:column>
+                
+                <p:column headerText="Créditos">
+                    <p:outputLabel value="#{curso.numeroCreditos}" />
+                </p:column>
+                
+                <p:column headerText="Carga horária">
+                    <p:outputLabel value="#{curso.cargaHoraria}" />
+                </p:column>
+                
+                <p:column headerText="Qtd. disciplinas obrigatórias">
+                    <p:outputLabel value="#{curso.totalDisciplinasObrigatorias}" />
+                </p:column>
+                
+                <p:column width="60">
+                    <p:commandButton icon="ui-icon-trash" action="#{cadastroCursoBean.remover(curso)}" 
+                                     process="@this" update="@form"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

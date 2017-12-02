@@ -73,7 +73,7 @@ public class Curso implements Serializable {
     @ManyToOne(optional = false)
     private Departamento departamento;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "curso")
+    @OneToMany(mappedBy = "curso")
     private List<Matricula> matriculaList;
 
     public Curso() {

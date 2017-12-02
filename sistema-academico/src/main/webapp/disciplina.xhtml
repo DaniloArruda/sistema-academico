@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="conteudo">
+        <h:form id="frm" prependId="false">
+            <p:messages autoUpdate="true" closable="true"  />
+            
+            <h:panelGrid id="grid-disciplina" columns="2">
+                <p:outputLabel value="Código:" style="font-weight: bold;"
+                               rendered="#{cadastroDisciplinaBean.disciplinaCadastrada()}"/>
+                <p:outputLabel value="#{cadastroDisciplinaBean.disciplina.codigo}" style="font-weight: bold;"
+                               rendered="#{cadastroDisciplinaBean.disciplinaCadastrada()}"/>
+                
+                <p:outputLabel value="Nome" for="nome" />
+                <p:inputText id="nome" value="#{cadastroDisciplinaBean.disciplina.nome}" />
+                
+                <p:outputLabel value="Período" for="periodo" />
+                <p:inputNumber id="periodo" value="#{cadastroDisciplinaBean.disciplina.periodo}" 
+                               decimalPlaces="0"/>
+                
+                <p:outputLabel value="Departamento" for="departamento" />
+                <p:selectOneMenu id="departamento" value="#{cadastroDisciplinaBean.disciplina.departamento}" >
+                    <f:selectItem itemLabel="Selecione um departamento" noSelectionOption="true" />
+                    <f:selectItems value="#{cadastroDisciplinaBean.listaDepartamentos}" var="departamento"
+                                   itemLabel="#{departamento.nome}" itemValue="#{departamento}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel />
+                <p:commandButton value="Adicionar disciplinas pré-requisito" type="button"
+                                 onclick="PF('dialogDisciplinaPreRequisito').show();"/>
+                
+                <p:outputLabel />
+                <p:commandButton value="Cadastrar" action="#{cadastroDisciplinaBean.salvar()}"
+                                 update="@form" style="margin-top:20px;"/>
+                
+            </h:panelGrid>
+            
+            <p:dataTable id="table-disciplina" value="#{cadastroDisciplinaBean.listaDisciplinas}" var="disciplina"
+                         style="margin-top:20px;">
+                
+                <p:column headerText="Nome">
+                    <p:outputLabel value="#{disciplina.nome}" />
+                </p:column>
+
+                <p:column headerText="Período">
+                    <p:outputLabel value="#{disciplina.periodo}" />
+                </p:column>
+
+                <p:column headerText="Departamento">
+                    <p:outputLabel value="#{disciplina.departamento.nome}" />
+                </p:column>
+                
+                <p:column headerText="Pré-requisitos">
+                    <p:rowToggler />
+                </p:column>
+
+                <p:column width="80">
+                    <p:commandButton icon="ui-icon-trash" action="#{cadastroDisciplinaBean.remover(disciplina)}" 
+                                     process="@this" update="@form" title="Excluir"/>
+                    <p:commandButton icon="ui-icon-pencil" action="#{cadastroDisciplinaBean.editar(disciplina)}" 
+                                     process="@this" update="grid-disciplina table-prerequisito" title="Editar"/>
+                </p:column>
+                
+                <p:rowExpansion>
+                    <ui:repeat value="#{disciplina.disciplinasPreRequisito}" var="preRequisito" >
+                        <p:outputLabel value="#{preRequisito.nome}"/> <br/>
+                    </ui:repeat>
+                </p:rowExpansion>
+            </p:dataTable>
+            
+            <p:dialog id="dialog-disciplina-prerequisito" header="Pré-requisitos" 
+                      draggable="false" modal="true" maximizable="false" resizable="false" 
+                      widgetVar="dialogDisciplinaPreRequisito" 
+                      visible="#{cadastroDisciplinaBean.dialogVisivel}">
+                <h:panelGrid>
+                    <p:selectOneMenu value="#{cadastroDisciplinaBean.disciplinaPreRequisito}" >
+                        <f:selectItem itemLabel="Selecione uma disciplina" />
+                        <f:selectItems value="#{cadastroDisciplinaBean.listaDisciplinas}" var="disciplina"
+                                       itemLabel="#{disciplina.nome}" itemValue="#{disciplina}" />
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton value="Adicionar disciplina"
+                                     action="#{cadastroDisciplinaBean.adicionarDisciplinaPreRequisito()}"
+                                     process="dialog-disciplina-prerequisito" update="table-prerequisito" />
+                </h:panelGrid>
+                
+                <p:dataTable id="table-prerequisito" 
+                             value="#{cadastroDisciplinaBean.disciplina.disciplinasPreRequisito}" var="disciplina" 
+                             style="width:800px; margin-top:20px;">
+
+                    <p:column headerText="Nome">
+                        <p:outputLabel value="#{disciplina.nome}" />
+                    </p:column>
+
+                    <p:column headerText="Período">
+                        <p:outputLabel value="#{disciplina.periodo}" />
+                    </p:column>
+
+                    <p:column headerText="Departamento">
+                        <p:outputLabel value="#{disciplina.departamento.nome}" />
+                    </p:column>
+
+                    <p:column width="60">
+                        <p:commandButton icon="ui-icon-trash" action="#{cadastroDisciplinaBean.removerDisciplinaPreRequisito(disciplina)}" 
+                                         process="@this" update="table-prerequisito"/>
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

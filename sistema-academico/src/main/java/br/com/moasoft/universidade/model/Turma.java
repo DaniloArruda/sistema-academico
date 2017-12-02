@@ -10,10 +10,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -65,9 +67,11 @@ public class Turma implements Serializable {
     @ManyToOne(optional = false)
     private Professor professor;
     
-    @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo")
+    @JoinColumns({
+        @JoinColumn(name = "codigo_curso", referencedColumnName = "codigo_curso", nullable = false),
+        @JoinColumn(name = "codigo_disciplina", referencedColumnName = "codigo_disciplina", nullable = false)})
     @ManyToOne(optional = false)
-    private Disciplina disciplina;
+    private DisciplinaCurso disciplinaCurso;
 
     public Turma() {
     }
@@ -123,12 +127,12 @@ public class Turma implements Serializable {
         this.professor = professor;
     }
 
-    public Disciplina getDisciplina() {
-        return disciplina;
+    public DisciplinaCurso getDisciplinaCurso() {
+        return disciplinaCurso;
     }
 
-    public void setDisciplina(Disciplina disciplina) {
-        this.disciplina = disciplina;
+    public void setDisciplinaCurso(DisciplinaCurso disciplinaCurso) {
+        this.disciplinaCurso = disciplinaCurso;
     }
 
     @Override

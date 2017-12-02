@@ -1,19 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/WEB-INF/layout.xhtml"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <h:form id="frm">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <ui:define name="conteudo">
+        <h:form id="frm" prependId="false">
             <p:messages autoUpdate="true" closable="true" />
             
-            <h:panelGrid columns="2">
+            <h:panelGrid id="grid-aluno" columns="2">
                 <p:outputLabel value="CPF" for="cpf" />
-                <p:inputText id="cpf" value="#{cadastroAlunoBean.aluno.cpf}"
-                             validator="CpfValidator"/>
+                <p:inputMask id="cpf" mask="999.999.999-99"
+                             value="#{cadastroAlunoBean.aluno.cpf}"
+                             validator="CpfValidator" converter="CpfConverter" />
                 
                 <p:outputLabel value="Nome" for="nome" />
                 <p:inputText id="nome" value="#{cadastroAlunoBean.aluno.nome}" />
@@ -24,6 +26,39 @@
                 <p:outputLabel value="Email" for="email" />
                 <p:inputText id="email" value="#{cadastroAlunoBean.aluno.email}" />
                 
+                <p:outputLabel value="Logradouro" for="logradouro" />
+                <p:inputText id="logradouro" value="#{cadastroAlunoBean.aluno.endereco.logradouro}" />
+                
+                <p:outputLabel value="Numero" for="numero" />
+                <p:inputText id="numero" value="#{cadastroAlunoBean.aluno.endereco.numero}" />
+                
+                <p:outputLabel value="Cidade" for="cidade" />
+                <p:inputText id="cidade" value="#{cadastroAlunoBean.aluno.endereco.cidade}" />
+                
+                <p:outputLabel value="CEP" for="cep" />
+                <p:inputText id="cep" value="#{cadastroAlunoBean.aluno.endereco.cep}" />
+                
+                <p:outputLabel value="Bairro" for="bairro" />
+                <p:inputText id="bairro" value="#{cadastroAlunoBean.aluno.endereco.bairro}" />
+                
+                <p:outputLabel value="Telefone" for="ddd"/>
+                <h:panelGroup id="div-telefone">
+                    <p:inputText id="ddd" size="1" maxlength="2" 
+                                 value="#{cadastroAlunoBean.telefone.telefonePK.ddd}" />
+                    <p:inputText id="telefone" value="#{cadastroAlunoBean.telefone.telefonePK.telefone}" />
+                    <p:commandButton icon="ui-icon-plus" action="#{cadastroAlunoBean.adicionarTelefone()}"
+                                     process="div-telefone" update="table-telefone"/>
+                </h:panelGroup>
+                
+                <p:outputLabel/>
+                <p:dataTable id="table-telefone" 
+                             value="#{cadastroAlunoBean.aluno.telefoneList}" var="telefone" 
+                             style="width:300px;">
+                    <p:column headerText="Telefones" style="text-align: center;" >
+                        <p:outputLabel value="(#{telefone.telefonePK.ddd}) #{telefone.telefonePK.telefone}"/>
+                    </p:column>
+                </p:dataTable>
+                
                 <p:outputLabel/>
                 <p:commandButton value="Cadastrar" action="#{cadastroAlunoBean.salvar()}"
                                  update="@form"/>
@@ -32,18 +67,27 @@
             <p:dataTable id="table-aluno" value="#{cadastroAlunoBean.listaAlunos}" var="aluno" 
                          style="margin-top:20px;">
                 <p:column headerText="CPF">
-                    <p:outputLabel value="#{aluno.cpf}" />
+                    <p:outputLabel value="#{aluno.cpf}" >
+                        <f:converter converterId="CpfConverter" />
+                    </p:outputLabel>
                 </p:column>
+                
                 <p:column headerText="Nome">
                     <p:outputLabel value="#{aluno.nome}" />
                 </p:column>
-                <p:column width="60">
+                
+                <p:column headerText="Email">
+                    <p:outputLabel value="#{aluno.email}" />
+                </p:column>
+                
+                <p:column width="80">
                     <p:commandButton icon="ui-icon-trash" action="#{cadastroAlunoBean.remover(aluno)}" 
-                                     process="frm:table-aluno" update="@form"/>
+                                     process="table-aluno" update="@form"/>
+                    <p:commandButton icon="ui-icon-pencil" action="#{cadastroAlunoBean.editar(aluno)}" 
+                                     process="@this" update="grid-aluno" title="Editar"/>
                 </p:column>
             </p:dataTable>
         </h:form>
-        
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>
 

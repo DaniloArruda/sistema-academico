@@ -6,6 +6,7 @@
 package br.com.moasoft.universidade.controller;
 
 import br.com.moasoft.universidade.model.Aluno;
+import br.com.moasoft.universidade.model.Telefone;
 import br.com.moasoft.universidade.repository.Alunos;
 import br.com.moasoft.universidade.util.jpa.Transactional;
 import br.com.moasoft.universidade.util.jsf.FacesUtil;
@@ -31,6 +32,8 @@ public class CadastroAlunoBean implements Serializable {
     private Aluno aluno = new Aluno();
     private List<Aluno> listaAlunos;
     
+    private Telefone telefone = new Telefone();
+    
     @PostConstruct
     private void init() {
         buscarTodos();
@@ -46,7 +49,7 @@ public class CadastroAlunoBean implements Serializable {
             this.alunos.salvar(aluno);
             this.aluno = new Aluno();
             buscarTodos();
-            FacesUtil.addInfoMessage("Aluno cadastrado.");
+            FacesUtil.addInfoMessage("Aluno salvo.");
         } catch (Exception e) {
             FacesUtil.addErrorMessage("Erro ao cadastrar: " + e.getMessage());
         }
@@ -62,6 +65,16 @@ public class CadastroAlunoBean implements Serializable {
             FacesUtil.addErrorMessage("Erro ao cadastrar: " + e.getMessage());
         }
     }
+    
+    public void editar(Aluno aluno) {
+        this.aluno = aluno;
+    }
+    
+    public void adicionarTelefone() {
+        this.telefone.setAluno(aluno);
+        this.aluno.getTelefoneList().add(telefone);
+        this.telefone = new Telefone();
+    }
 
     public Aluno getAluno() {
         return aluno;
@@ -73,5 +86,13 @@ public class CadastroAlunoBean implements Serializable {
 
     public List<Aluno> getListaAlunos() {
         return listaAlunos;
+    }
+
+    public Telefone getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(Telefone telefone) {
+        this.telefone = telefone;
     }
 }

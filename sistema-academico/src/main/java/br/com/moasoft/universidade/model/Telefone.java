@@ -37,6 +37,7 @@ public class Telefone implements Serializable {
     private Aluno aluno;
 
     public Telefone() {
+        this.telefonePK = new TelefonePK();
     }
 
     public Telefone(TelefonePK telefonePK) {
